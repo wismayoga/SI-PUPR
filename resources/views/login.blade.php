@@ -2,7 +2,7 @@
 <html lang="en">
 
 <head>
-    <title>Login 10</title>
+    <title>Login</title>
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -11,6 +11,7 @@
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/sweetalert/1.1.3/sweetalert.min.css">
 
     <link rel="stylesheet" href="{{ asset('assets_login/css/style.css') }}">
+    <link rel="icon" type="image/png" href="{{ asset('assets_login/images/logo.png') }}">
 
 
     <style>

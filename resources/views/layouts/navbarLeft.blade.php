@@ -23,14 +23,14 @@
                 <a href="index.html" class="active"><i class="material-icons-two-tone">dashboard</i>Dashboard</a>
             </li> --}}
             @if (auth()->user()->role == 'user')
-                <li class="{{ request()->routeIs('user.reports') ? 'active-page' : '' }}">
+                <li class="{{ request()->routeIs('user.reports', 'user.reports.show') ? 'active-page' : '' }}">
                     <a href="{{ route('user.reports') }}">
                         <i class="material-icons-two-tone">move_to_inbox</i>
                         Laporan Masuk
                     </a>
                 </li>
             @elseif(auth()->user()->role == 'admin')
-                <li class="{{ request()->routeIs('admin.reports') ? 'active-page' : '' }}">
+                <li class="{{ request()->routeIs('admin.reports', 'admin.reports.show') ? 'active-page' : '' }}">
                     <a href="{{ route('admin.reports') }}">
                         <i class="material-icons-two-tone">unarchive</i>
                         Laporan Keluar
