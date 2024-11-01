@@ -8,6 +8,7 @@ use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Storage;
 use ZipArchive;
+use Illuminate\Support\Facades\Storage as FacadesStorage;
 
 class AdminController extends Controller
 {
@@ -191,5 +192,99 @@ class AdminController extends Controller
         $report->save();
 
         return redirect()->route('admin.reports.show', $request->user)->with('success', 'Report updated successfully.');
+    }
+
+    //fungsi laporan Masuk ---
+    public function index2()
+    {
+        // Get all reports assigned to the authenticated user
+        // $reports = Report::where('assigned_user_id', Auth::id())->get();
+        $users = User::where('role', 'user')
+            ->withCount([
+                'reports as submitted_reports_count' => function ($query) {
+                    $query->where('status', 'submitted');
+                },
+                'reports as total_reports_count'
+            ])
+            ->orderBy('created_at', 'desc')
+            ->get();
+
+        return view('dashboard.laporanMasukAdmin', compact('users'));
+    }
+
+    public function showReportsIn($id)
+    {
+        // Get all reports assigned to the authenticated user
+        $reports = Report::where('assigned_user_id', $id)
+            ->orderBy('created_at', 'desc')
+            ->paginate(5);
+        // $reports = Report::paginate(2);
+        // dd($reports);
+
+        $user = User::find($id);
+
+        // Get total report count
+        $totalReportsCount = Report::where('assigned_user_id', $id)->count();
+
+
+        return view('dashboard.laporanMasukAdminShow', compact('reports', 'totalReportsCount', 'user'));
+    }
+
+    public function showReportsInDetails($id)
+    {
+        $report = Report::with('submission')->findOrFail($id); // Eager load submission
+        return view('dashboard.laporanMasukAdminShowDetails', compact('report'));
+    }
+
+    public function submitReportsIn(Request $request, $reportId)
+    {
+
+        // Temukan laporan berdasarkan ID
+        $report = Report::findOrFail($reportId);
+
+        // Ambil nama pengguna dari session (asumsikan Anda menyimpannya di session setelah login)
+        // $username = Auth::user()->nama; 
+        $username = User::find($report->assigned_user_id)->nama; // Sesuaikan jika Anda menyimpan nama pengguna dengan cara berbeda
+
+        // Buat nama file baru
+        $timestamp = now()->format('YmdHis'); // Format timestamp
+        $newFileName = "{$username}_{$report->report_name}_{$timestamp}." . $request->file('file')->getClientOriginalExtension(); // Tambahkan ekstensi file
+
+        // Store the file with the new name
+        $path = $request->file('file')->storeAs('submissions', $newFileName); // Simpan file dengan nama baru
+
+        // Create the submission
+        Submission::updateOrCreate(
+            ['report_id' => $reportId], // Create or update based on report ID
+            ['file_path' => $path]
+        );
+
+        // Update the report's status to 'submitted' after file upload
+        $report->status = 'submitted'; // Update status
+        $report->save(); // Save changes
+
+        return redirect()->route('admin.reportsin.show.details', $reportId)->with('success', 'File berhasil dikumpulkan.');
+    }
+
+
+    public function destroyReportsIn($id)
+    {
+        // Find the submission by ID
+        $submission = Submission::findOrFail($id);
+
+        // Get the report associated with the submission
+        $report = Report::findOrFail($submission->report_id);
+
+        // Delete the file from storage
+        FacadesStorage::delete($submission->file_path);
+
+        // Delete the submission record
+        $submission->delete();
+
+        // Update the report's status to 'not submitted'
+        $report->status = 'not submitted'; // Update status
+        $report->save(); // Save changes
+
+        return redirect()->back()->with('success', 'File berhasil dihapus.');
     }
 }

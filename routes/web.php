@@ -23,6 +23,13 @@ Route::middleware(['auth', Auth::class . ':admin'])->group(function () {
 
     Route::post('/settings/admin/reset-password', [SettingsController::class, 'resetAdminPassword'])->name('settings.admin.reset');
     Route::post('/settings/admin/reset-user-password', [SettingsController::class, 'resetUserPassword'])->name('settings.admin.reset-user');
+
+    Route::get('/reportsin', [AdminController::class, 'index2'])->name('admin.reportsin');
+    Route::get('/reportsin/{report}', [AdminController::class, 'showReportsIn'])->name('admin.reportsin.show');
+    Route::get('/reports/{report}/details', [AdminController::class, 'showReportsInDetails'])->name('admin.reportsin.show.details');
+
+    Route::post('/reportsin/{report}/submit', [AdminController::class, 'submitReportsIn'])->name('admin.reportsin.submit');
+    Route::delete('/submissionsReportsIn/{submission}', [AdminController::class, 'destroyReportsIn'])->name('admin.reportsin.delete');
 });
 
 // Route::middleware(['Auth', 'role:user'])->group(function () {

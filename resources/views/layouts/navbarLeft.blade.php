@@ -30,6 +30,13 @@
                     </a>
                 </li>
             @elseif(auth()->user()->role == 'admin')
+                <li
+                    class="{{ request()->routeIs('admin.reportsin', 'admin.reportsin.show', 'admin.reportsin.show.details') ? 'active-page' : '' }}">
+                    <a href="{{ route('admin.reportsin') }}">
+                        <i class="material-icons-two-tone">move_to_inbox</i>
+                        Laporan Masuk
+                    </a>
+                </li>
                 <li class="{{ request()->routeIs('admin.reports', 'admin.reports.show') ? 'active-page' : '' }}">
                     <a href="{{ route('admin.reports') }}">
                         <i class="material-icons-two-tone">unarchive</i>

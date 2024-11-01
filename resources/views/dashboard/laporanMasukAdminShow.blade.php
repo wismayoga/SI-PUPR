@@ -8,11 +8,16 @@
                 <div class="row">
                     <div class="col">
                         <div class="page-description">
-                            <h1>Laporan Masuk
+                            <h1>
+                                <a href="{{ route('admin.reportsin') }}" class="back-link">
+                                    <i class="material-icons-two-tone">arrow_back_ios</i>
+                                </a>
+                                {{ $user->nama }}
                                 @if ($totalReportsCount != null)
                                     ({{ $totalReportsCount }})
                                 @endif
                             </h1>
+
                         </div>
                     </div>
                 </div>
@@ -35,9 +40,9 @@
                                     <div class="card-footer d-flex justify-content-between align-items-center w-100 px-3">
                                         @if ($report->status == 'not submitted')
                                             <a href="#" class="btn btn-warning"
-                                                onclick="checkDeadline('{{ route('user.reports.show', $report->id) }}', '{{ $report->deadline }}')">Kumpulkan</a>
+                                                onclick="checkDeadline('{{ route('admin.reportsin.show.details', $report->id) }}', '{{ $report->deadline }}')">Kumpulkan</a>
                                         @else
-                                            <a href="{{ route('user.reports.show', $report->id) }}"
+                                            <a href="{{ route('admin.reportsin.show.details', $report->id) }}"
                                                 class="btn btn-success"><i class="material-icons">check</i>Terkumpul</a>
                                         @endif
                                         <div style="display: flex; align-items: center;">
@@ -82,7 +87,6 @@
                         </ul>
                     </nav>
                 @endif
-
             </div>
         </div>
     </div>
@@ -136,6 +140,20 @@
                 max-width: 300px;
                 /* Set a maximum width if needed */
             }
+        }
+
+        .back-link {
+            color: inherit;
+            /* Keeps the icon color same as text */
+            text-decoration: none;
+            /* Removes underline */
+            margin-right: 8px;
+            /* Adds spacing between icon and text */
+        }
+
+        .back-link:hover {
+            color: #006989;
+            /* Change color on hover */
         }
     </style>
 @endpush
