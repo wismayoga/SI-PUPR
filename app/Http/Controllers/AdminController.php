@@ -156,7 +156,7 @@ class AdminController extends Controller
 
         // Memastikan laporan ditemukan
         if (!$report) {
-            return redirect()->back()->with('error', 'Laporan tidak ditemukan.');
+            return redirect()->route('admin.reports.show', $report->assigned_user_id)->with('error', 'Laporan tidak ditemukan.');
         }
 
         // Mencari submission terkait dengan laporan ini

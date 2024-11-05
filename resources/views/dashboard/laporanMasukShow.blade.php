@@ -184,7 +184,9 @@
         var myDropzone = new Dropzone("#demo-upload", {
             paramName: "file",
             maxFilesize: 2,
-            acceptedFiles: ".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png",
+            // acceptedFiles: ".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png",
+            acceptedFiles: ".pdf,.doc,.docx,.ppt,.pptx,.jpg,.jpeg,.png,.xls,.xlsx",
+
             autoProcessQueue: false,
             maxFiles: 1,
             init: function() {
